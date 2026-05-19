@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>이윤정</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* 기본 리셋 및 폰트 설정 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', 'Noto Sans KR', sans-serif;
+        }
+
+        body, html {
+            height: 100%;
+            overflow: hidden; /* 배경 격자가 넘치지 않게 */
+        }
+
+        /* 1. 배경 설정: 이미지의 격자 무늬를 CSS Grid로 구현 */
+        .background-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #ffffff; /* 기본 배경 */
+            background-image: 
+                linear-gradient(to right, rgba(200, 200, 200, 0.2) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(200, 200, 200, 0.2) 1px, transparent 1px);
+            background-size: 50px 50px; /* 격자 크기 */
+            z-index: -1;
+            /* 이미지의 비네팅(그라데이션 효과) 추가 */
+            box-shadow: inset 0 0 150px rgba(230, 230, 230, 0.5); 
+        }
+
+        /* 2. 메인 컨텐츠 영역 */
+        .main-container {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            text-align: center;
+            padding: 20px; /* 모바일 대응 */
+        }
+
+        /* 3. 연도 스티커 */
+        .year-badge {
+            display: block;
+            background-color: #ffd700; /* 노란색 */
+            color: #ffffff;
+            font-size: 1.1rem;
+            font-weight: 700;
+            padding: 8px 16px;
+            border-radius: 20px;
+            margin-bottom: 25px; /* 이름과의 간격 */
+            position: relative; /* 그림자 효과를 위해 */
+            z-index: 2;
+        }
+
+        /* 4. 이름 - 핵심 요청: 훨씬 더 BOLD체 */
+        .full-name {
+            display: block;
+            font-size: 4rem; /* 모바일에서는 줄어듦 */
+            color: #222222;
+            text-transform: uppercase;
+            /* 폰트 weight를 800-900으로 설정 (Google Font 로드 필요) */
+            font-weight: 900; 
+            letter-spacing: 2px;
+            line-height: 1.1;
+            margin-bottom: 30px; /* 버튼과의 간격 */
+            z-index: 2;
+        }
+
+        /* 5. 버튼 컨테이너 - 반응형 */
+        .button-group {
+            display: flex;
+            gap: 25px;
+            justify-content: center;
+            z-index: 2;
+        }
+
+        /* 6. 공통 버튼 스타일 */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #6688cc; /* 파란색 */
+            color: #ffffff;
+            font-size: 1.1rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            text-decoration: none;
+            padding: 15px 35px;
+            border-radius: 30px; /* 둥근 버튼 */
+            transition: all 0.3s ease; /* 호버 효과 */
+            width: auto; /* 내용에 맞춰 */
+            min-width: 180px; /* 최소 너비 확보 */
+            z-index: 2;
+        }
+
+        /* 7. 마우스 포인터 스타일 */
+        .pointer-cursor {
+            cursor: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><path fill="%23FFFFFF" d="M10 2L2 10h5v8h6v-8h5z" transform="rotate(-45 10 10)"/></svg>') 10 10, pointer;
+        }
+
+        /* 호버 효과 */
+        .btn:hover {
+            background-color: #5577bb;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        /* 포트폴리오 버튼 전용 마우스 커서 아이콘 (CSS로 구현) */
+        .btn.portfolio-btn {
+            position: relative;
+        }
+
+        .btn.portfolio-btn:after {
+            content: "";
+            position: absolute;
+            bottom: -5px; /* 포인터 위치 조정 */
+            right: 5px;
+            width: 25px; /* 포인터 크기 조정 */
+            height: 25px;
+            background-image: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25"><path fill="%23FFFFFF" d="M12.5 2L2 12.5h7v10.5h7V12.5h7z" transform="rotate(-45 12.5 12.5)"/></svg>');
+            background-size: contain;
+            background-repeat: no-repeat;
+            opacity: 1; /* 기본적으로 보이게 */
+            pointer-events: none; /* 아이콘 클릭 방지 */
+            filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.3));
+        }
+
+        /* 반응형: 모바일 화면 */
+        @media (max-width: 768px) {
+            .background-grid {
+                background-size: 30px 30px; /* 모바일에서 격자 크기 축소 */
+            }
+
+            .main-container {
+                padding: 10px;
+            }
+
+            .full-name {
+                font-size: 2.2rem; /* 모바일 이름 크기 축소 */
+                margin-bottom: 25px;
+            }
+
+            .button-group {
+                flex-direction: column; /* 세로 정렬 */
+                gap: 15px;
+                width: 80%; /* 모바일에서 버튼 너비 증가 */
+            }
+
+            .btn {
+                width: 100%; /* 모바일에서 버튼 너비 가득 차게 */
+                min-width: unset;
+                padding: 12px 20px;
+                font-size: 1rem;
+            }
+
+            .year-badge {
+                font-size: 1rem;
+                padding: 6px 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="background-grid"></div>
+
+    <main class="main-container">
+      
+
+        <h1 class="full-name">Lee Yoon Jeong</h1>
+
+        <div class="button-group">
+            <a href="resume.html" class="btn resume-btn pointer-cursor">Resume</a>
+            <a href="port.html" class="btn portfolio-btn pointer-cursor">Portfolio</a>
+        </div>
+    </main>
+
+</body>
+</html>

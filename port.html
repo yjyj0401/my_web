@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio</title>
+    <!-- Pretendard 폰트 불러오기 -->
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
+    <style>
+        /* 기본 스타일 초기화 및 메인 색감 변수 설정 */
+        :root {
+            --bg-color: #e3f2fd;      /* 메인 연한 배경색 */
+            --primary-color: #3182ce; /* 포인트 블루 컬러 */
+            --text-dark: #1a202c;
+            --card-bg: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            min-height: 100vh;
+            padding: 2rem 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* 중앙 상단 타이틀 스타일 (너무 크지 않은 Pretendard Bold) */
+        header {
+            margin-bottom: 2.5rem;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 3rem; /* 적당한 크기의 글자 지정 */
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: -0.02em;
+
+	background: linear-gradient(to top, rgba(49, 130, 206, 0.35) 30%, transparent 30%);
+            padding: 0 4px;
+        }
+
+        /* CSS Grid를 활용한 반응형 카드 레이아웃 */
+        .portfolio-grid {
+            width: 100%;
+            max-width: 1200px;
+            display: grid;
+            /* 화면 크기에 맞춰 자동으로 열 개수 조절 (최소 280px) */
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            padding: 0 0.5rem;
+        }
+
+        /* 카드 개별 스타일 */
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(49, 130, 206, 0.2);
+        }
+
+        /* 카드 미디어 영역 (16:9 비율 유지) */
+        .card-media-wrapper {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%; /* 16:9 Ratio */
+            background-color: #edf2f7;
+        }
+
+        .card-media-wrapper img,
+        .card-media-wrapper video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* 카드 설명 영역 */
+        .card-info {
+            padding: 1rem;
+        }
+
+        .card-info h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .card-info p {
+            font-size: 0.85rem;
+            color: #718096;
+        }
+
+        /* 라이트박스 모달 스타일 (중앙 팝업) */
+        .lightbox {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 1000;
+            padding: 2rem;
+        }
+
+        .lightbox.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .lightbox-content {
+            max-width: 90%;
+            max-height: 80vh;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            background-color: #000;
+        }
+
+        /* 모달 닫기 버튼 */
+        .close-btn {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 2rem;
+            cursor: pointer;
+            line-height: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Portfolio</h1>
+    </header>
+
+    <!-- 카드가 동적으로 생성될 그리드 컨테이너 -->
+    <main class="portfolio-grid" id="portfolioGrid"></main>
+
+    <!-- 중앙 팝업 라이트박스 -->
+    <div class="lightbox" id="lightbox">
+        <button class="close-btn" id="closeBtn">&times;</button>
+        <div id="lightboxBody"></div>
+    </div>
+
+    <script>
+        /**
+         * 프론트엔드 JavaScript(브라우저 환경) 자체는 보안 및 브라우저 정책상 
+         * 사용자 PC나 서버의 특정 폴더('media/') 내 파일 개수를 직접 스캔(File System API 제외)할 수 없습니다.
+         * 따라서, 실제 서비스 시에는 백엔드(Node.js 등) API를 호출하거나 빌드 스크립트를 써야 합니다.
+         * 
+         * 아래 코드는 포트폴리오 'media' 폴더에 들어갈 파일 리스트를 배열로 정의하여 
+         * 자동으로 그리드를 생성하고 반응형 및 팝업을 처리하는 정석적인 방법입니다.
+         * 본인의 media 폴더 내 파일명과 확장자에 맞게 아래 리스트를 수정해 주세요!
+         */
+        const mediaFiles = [
+            { type: 'image', src: 'media/고고_캐릭터시트.jpeg', title: '프로젝트 이미지 01', desc: 'AI Image' },
+
+            { type: 'image', src: 'media/구구_캐릭터시트.jpeg', title: '프로젝트 이미지 02', desc: 'AI Image' },
+            { type: 'image', src: 'media/두두_캐릭터시트.jpeg', title: '프로젝트 이미지 03', desc: 'AI Image' },
+
+        ];
+
+        const gridContainer = document.getElementById('portfolioGrid');
+        const lightbox = document.getElementById('lightbox');
+        const lightboxBody = document.getElementById('lightboxBody');
+        const closeBtn = document.getElementById('closeBtn');
+
+        // 1. 미디어 파일 배열을 기반으로 카드 동적 생성 및 배치
+        function createPortfolio() {
+            mediaFiles.forEach((file) => {
+                const card = document.createElement('div');
+                card.classList.add('card');
+
+                // 미디어 타입(이미지 vs 비디오)에 따른 썸네일 태그 분기
+                let mediaTag = '';
+                if (file.type === 'image') {
+                    mediaTag = `<img src="${file.src}" alt="${file.title}" loading="lazy">`;
+                } else if (file.type === 'video') {
+                    // 비디오 카드는 첫 프레임을 보여주기 위해 정지 상태로 생성
+                    mediaTag = `<video src="${file.src}" muted playsinline></video>`;
+                }
+
+                card.innerHTML = `
+                    <div class="card-media-wrapper">
+                        ${mediaTag}
+                    </div>
+                    <div class="card-info">
+                        <h3>${file.title}</h3>
+                        <p>${file.desc}</p>
+                    </div>
+                `;
+
+                // 카드를 클릭했을 때 중앙 팝업(라이트박스) 활성화 이벤트
+                card.addEventListener('click', () => openLightbox(file));
+                gridContainer.appendChild(card);
+            });
+        }
+
+        // 2. 라이트박스 열기 함수
+        function openLightbox(file) {
+            lightboxBody.innerHTML = ''; // 기존 내용 초기화
+
+            let contentTag;
+            if (file.type === 'image') {
+                contentTag = document.createElement('img');
+                contentTag.src = file.src;
+                contentTag.classList.add('lightbox-content');
+            } else if (file.type === 'video') {
+                contentTag = document.createElement('video');
+                contentTag.src = file.src;
+                contentTag.controls = true; // 팝업 시 재생 컨트롤러 표시
+                contentTag.autoplay = true; // 자동으로 재생
+                contentTag.classList.add('lightbox-content');
+            }
+
+            lightboxBody.appendChild(contentTag);
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden'; // 뒷배경 스크롤 방지
+        }
+
+        // 3. 라이트박스 닫기 함수
+        function closeLightbox() {
+            lightbox.classList.remove('active');
+            lightboxBody.innerHTML = ''; // 비디오 재생 등 멈추기 위해 제거
+            document.body.style.overflow = ''; // 스크롤 복구
+        }
+
+        // 이벤트 리스너 바인딩
+        closeBtn.addEventListener('click', closeLightbox);
+        
+        // 배경을 클릭해도 닫히도록 설정
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) closeLightbox();
+        });
+
+        // ESC 키를 누르면 닫히도록 설정
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && lightbox.classList.contains('active')) {
+                closeLightbox();
+            }
+        });
+
+        // 초기화 실행
+        document.addEventListener('DOMContentLoaded', createPortfolio);
+    </script>
+</body>
+</html>

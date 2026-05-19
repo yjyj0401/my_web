@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>이윤정 이력서</title>
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+            color: #333333;
+            background-color: #ffffff;
+            line-height: 1.6;
+        }
+        .resume-container {
+            display: flex;
+            min-height: 100vh;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            box-shadow: 0 0 20px rgba(0,0,0,0.05);
+        }
+        
+        /* 왼쪽 사이드바 (연하늘색 컨셉) */
+        .sidebar {
+            width: 32%;
+            background-color: #e3f2fd; /* 요구사항: 연하늘색 배경 설정 */
+            color: #2c3e50;
+            padding: 40px 30px;
+            display: flex;
+            flex-direction: column;
+        }
+        .profile-img-container {
+            width: 180px;
+            height: 230px;
+            margin: 0 auto 40px auto;
+            background-color: #ffffff;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            /* border: 1px solid #d0e3f0; */
+        }
+        .profile-img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .sidebar-section {
+            margin-bottom: 35px;
+        }
+        .sidebar-name {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #1a365d;
+        }
+        .sidebar-job {
+            font-size: 14px;
+            color: #4a5568;
+            margin-bottom: 25px;
+            font-weight: 500;
+        }
+        .info-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            font-size: 12.5px;
+            word-break: break-all;
+        }
+        .info-list li {
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+        .info-label {
+            font-weight: bold;
+            display: block;
+            color: #2b6cb0;
+            font-size: 11px;
+            text-transform: uppercase;
+            margin-bottom: 2px;
+        }
+        .sidebar-title {
+            font-size: 16px;
+            font-weight: bold;
+            border-bottom: 2px solid #bee3f8;
+            padding-bottom: 5px;
+            margin-bottom: 15px;
+            color: #2b6cb0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        /* 외국어 능력 막대그래프 (연하늘색 테마에 맞춤) */
+        .skill-item {
+            margin-bottom: 12px;
+        }
+        .skill-name {
+            font-size: 12px;
+            font-weight: 500;
+            margin-bottom: 4px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background-color: #ffffff;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background-color: #3182ce; /* 부드러운 강조 블루 컬러 적용 */
+            border-radius: 4px;
+        }
+        
+        /* 오른쪽 메인 콘텐츠 */
+        .main-content {
+            width: 68%;
+            padding: 50px 40px;
+            background-color: #ffffff;
+        }
+        .main-header {
+            margin-bottom: 40px;
+            position: relative;
+        }
+        .main-title-wrap {
+            display: inline-block;
+            position: relative;
+            margin-bottom: 10px;
+        }
+        .main-title {
+            font-size: 28px;
+            font-weight: 800;
+            color: #1a202c;
+            position: relative;
+            z-index: 2;
+            margin: 0;
+        }
+        .title-accent-bar {
+            position: absolute;
+            bottom: 2px;
+            left: 0;
+            width: 100%;
+            height: 15px;
+            background-color: #e3f2fd; /* 요구사항: 연하늘색 강조 바 */
+            z-index: 1;
+        }
+        .branding-tag {
+            font-size: 13px;
+            color: #718096;
+            font-weight: 500;
+            margin-top: 5px;
+        }
+        .intro-text {
+            font-size: 13.5px;
+            color: #4a5568;
+            line-height: 1.7;
+            text-align: justify;
+            margin-top: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .content-section {
+            margin-bottom: 35px;
+        }
+        .section-heading {
+            font-size: 16px;
+            font-weight: bold;
+            color: #1a202c;
+            margin: 0 0 15px 0;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #e2e8f0;
+            letter-spacing: 0.5px;
+        }
+        
+        .timeline-item {
+            margin-bottom: 20px;
+        }
+        .timeline-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 5px;
+        }
+        .timeline-title {
+            font-size: 14.5px;
+            font-weight: bold;
+            color: #2d3748;
+        }
+        .timeline-period {
+            font-size: 12px;
+            color: #718096;
+            font-weight: 500;
+        }
+        .timeline-sub {
+            font-size: 13px;
+            color: #4a5568;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+        .timeline-desc {
+            font-size: 13px;
+            color: #4a5568;
+            line-height: 1.6;
+            margin: 0;
+        }
+  
+        .grid-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            padding: 0;
+            margin: 0;
+            list-style: none;
+        }
+        .grid-list li {
+            font-size: 13px;
+            color: #4a5568;
+            background-color: #f7fafc;
+            padding: 8px 12px;
+            border-radius: 4px;
+            /* border-left: 3px solid #63b3ed; */
+        }
+
+        /* 반응형 모바일 레이아웃 */
+        @media (max-width: 768px) {
+            .resume-container {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                padding: 30px 20px;
+            }
+            .main-content {
+                width: 100%;
+                padding: 30px 20px;
+            }
+            .profile-img-container {
+                margin: 0 auto 25px auto;
+            }
+            .grid-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="resume-container">
+    <div class="sidebar">
+        <div class="profile-img-container">
+            <img src="me.jpeg" alt="이윤정 사진" onerror="this.style.display='none'; this.parentNode.style.background='#cbd5e0';">
+        </div>
+        
+        <div class="sidebar-section">
+            <div class="sidebar-name">이윤정</div>
+            <div class="sidebar-job">마케팅 디렉터</div>
+            <ul class="info-list">
+                <li>
+                    <span class="info-label">ADDRESS</span>
+                    서울특별시 성동구 성수이로 123
+                </li>
+                <li>
+                    <span class="info-label">PHONE</span>
+                    010-1234-5678
+                </li>
+                <li>
+                    <span class="info-label">E-MAIL</span>
+                    seoyeon.kim@email.com
+                </li>
+            </ul>
+        </div>
+        
+        <div class="sidebar-section">
+            <div class="sidebar-title">Skills</div>
+            
+            <div class="skill-item">
+                <div class="skill-name"><span>-</span><span>5 / 5</span></div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 100%;"></div>
+                </div>
+            </div>
+            
+            <div class="skill-item">
+                <div class="skill-name"><span>-</span><span>4 / 5</span></div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 80%;"></div>
+                </div>
+            </div>
+            
+            <div class="skill-item">
+                <div class="skill-name"><span>-</span><span>2 / 5</span></div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 40%;"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="sidebar-section">
+            <div class="sidebar-title">CERTIFICATES</div>
+            <ul class="info-list">
+                <li>구글 애널리틱스 인증</li>
+                <li>검색광고마케터 1급</li>
+            </ul>
+        </div>
+
+        <div class="sidebar-section" style="margin-bottom: 0;">
+            <div class="sidebar-title">LINKS</div>
+            <ul class="info-list">
+                <li><a href="http://www.seoyeonkim-portfolio.com" target="_blank" style="color: inherit; text-decoration: none;">Portfolio: www.seoyeonkim-portfolio.com</a></li>
+                <li><a href="https://linkedin.com/in/seoyeonkim" target="_blank" style="color: inherit; text-decoration: none;">LinkedIn: linkedin.com/in/seoyeonkim</a></li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="main-content">
+        <div class="main-header">
+            <div class="main-title-wrap">
+                <h1 class="main-title">마케팅 디렉터 이윤정</h1>
+                <div class="title-accent-bar"></div>
+            </div>
+            <div class="branding-tag">@KIMSEOYEON.PORTFOLIO</div>
+            
+            <p class="intro-text">
+                8년 이상의 경력을 바탕으로 브랜드 전략 수립, 디지털 캠페인 운영, 콘텐츠 기획, 성과 분석을 수행해 온 마케팅 실무자입니다. B2B 및 브랜드 마케팅 환경에서 리드 확보, 전환율 개선, 고객 접점 확대 등 구체적인 성과를 만들어 왔으며, 데이터 기반 의사결정과 유관 부서 협업을 통해 실행력 있는 마케팅 프로젝트를 안정적으로 운영해 왔습니다. 국내 대기업 및 성장형 스타트업 환경 모두에 적합한 체계적 업무 추진력과 실무 중심의 문제 해결 역량을 갖추고 있습니다.
+            </p>
+        </div>
+        
+        <div class="content-section">
+            <h2 class="section-heading">경력사항</h2>
+            
+            <div class="timeline-item">
+                <div class="timeline-header">
+                    <div class="timeline-title">이노베이트 마케팅</div>
+                    <div class="timeline-period">2021 - 2023</div>
+                </div>
+                <div class="timeline-sub">마케팅 디렉터</div>
+                <p class="timeline-desc">B2B 테크 기업 대상 통합 마케팅 전략을 총괄하며 리드 수 45% 증가, 전환율 30% 향상에 기여.</p>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-header">
+                    <div class="timeline-title">크리에이티브 솔루션</div>
+                    <div class="timeline-period">2019 - 2021</div>
+                </div>
+                <div class="timeline-sub">시니어 마케팅 매니저</div>
+                <p class="timeline-desc">디지털 광고, 콘텐츠, SNS를 연계한 멀티채널 캠페인을 운영하고 유관 부서와 협업하여 브랜드 성과를 개선.</p>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-header">
+                    <div class="timeline-title">브랜드빌더스</div>
+                    <div class="timeline-period">2017 - 2019</div>
+                </div>
+                <div class="timeline-sub">마케팅 스페셜리스트</div>
+                <p class="timeline-desc">소셜미디어 운영, 콘텐츠 제작, 온라인 프로모션 기획 및 실행을 담당하며 고객 접점을 확대.</p>
+            </div>
+        </div>
+        
+        <div class="content-section">
+            <h2 class="section-heading">학력사항</h2>
+            
+            <div class="timeline-item">
+                <div class="timeline-header">
+                    <div class="timeline-title">ㅇㅇ대학교 경영대학원</div>
+                    <div class="timeline-period">2015.06 - 2017.07</div>
+                </div>
+                <div class="timeline-sub">경영학 석사</div>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-header">
+                    <div class="timeline-title">ㅇㅇ대학교</div>
+                    <div class="timeline-period">2011.03 - 2015.02</div>
+                </div>
+                <div class="timeline-sub">마케팅학 학사</div>
+            </div>
+        </div>
+        
+        <div class="content-section">
+            <h2 class="section-heading">핵심 역량</h2>
+            <ul class="grid-list">
+                <li>디지털 마케팅</li>
+                <li>SEO / SEM</li>
+                <li>콘텐츠 전략</li>
+                <li>소셜미디어 운영</li>
+                <li>데이터 분석</li>
+                <li>브랜드 관리</li>
+                <li>프로젝트 관리</li>
+            </ul>
+        </div>
+        
+    </div>
+</div>
+
+</body>
+</html>
